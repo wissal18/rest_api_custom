@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="rest_api_custom_action" model="ir.actions.act_window">
+        <field name="name">Rest API</field>
+        <field name="res_model">rest.api</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="rest_api_form" model="ir.ui.view">
+        <field name="name">rest.api.form</field>
+        <field name="model">rest.api</field>
+        <field name="arch" type="xml">
+            <form string="API">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm"/>
+                </header>
+                <sheet>
+
+                    <group>
+                        <field name="name"/>
+                        <field name="method"/>
+                        <field name="model_id"/>
+                        <field name="fields_list" widget="many2many_tags" domain="[('model_id','=',model_id)]"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="rest_api_tree" model="ir.ui.view">
+        <field name="name">rest.api.tree</field>
+        <field name="model">rest.api</field>
+        <field name="arch" type="xml">
+            <tree string="API">
+                <field name="name"/>
+                <field name="method"/>
+                <field name="model_id"/>
+            </tree>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="rest_api_custom_menu_root" name="Odoo API">
+        <menuitem id="rest_api_sub_menu" name="APIs" action="rest_api_custom_action"/>
+    </menuitem>
+</odoo>
