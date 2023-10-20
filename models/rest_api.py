@@ -21,10 +21,10 @@ class RestAPI(models.Model):
             if record.model_id:
                 record.fields_list = None
 
-    def action(self, method, model, fields=None):
+    def action(self, method, model_api, id=None):
 
-        modelAPI = self.env[model]
-        model_fields = fields.mapped('name')
+        modelAPI = self.env[model_api.model_name]
+        model_fields = model_api.fields_list.mapped('name')
         res = request.get_json_data()
 
         if method == 'get':
@@ -37,24 +37,23 @@ class RestAPI(models.Model):
                     obj[key] = res[key]
                 res = obj
             # if model_fields is empty the record will be created using the json data else it will be created using only the fields founded in model_fields
-            result = modelAPI.create(res)
-
+            object = modelAPI.create(res)
+            result = modelAPI.search([('id', '=', object.id)]).read(model_fields if fields else [])
         if method == 'put':
-            if model_fields:
-                print(model_fields)
-                obj = {}
-                for key, value in res.items():
+            obj = {}
+            for key, value in res.items():
+                if model_fields:
                     if key in model_fields:
                         obj[key] = value
 
             # the id of the record is obtained from the json data
-            result = modelAPI.browse(res['id']).update(obj if model_fields else res)
-
+            modelAPI.browse(res['id']).update(obj if model_fields else res)
+            result = modelAPI.search([('id', '=', id)]).read(model_fields if fields else [])
         if method == 'delete':
-            result = modelAPI.browse(res['id']).unlink()
+            result = modelAPI.browse(id).unlink()
         return {
             'method': method,
-            'model': model,
+            'model': model_api.model_name,
             'result': result
         }
 

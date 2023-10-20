@@ -25,68 +25,68 @@ class RestAPICustomController(http.Controller):
         if not result:
             res['error'] = 'API does not exist'
             return res
-        return result.action(method, result, id)
+        return result[0].action(method, result, id)
             
 
     
-    @http.route(['/get/<name>'], auth='public', methods=['GET'],
-                type='json')
-    def get_method(self, name):
-
-        try:
-            result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'get')])
-
-        except:
-            return 'Can\'t Access'
-        if result:
-            return result[0].action('get', result.model_name,result.fields_list)
-        else:
-            return "the URL entered not found"
-
-
-
-    @http.route(['/post/<name>'], auth='public', methods=['POST'],
-                type='json')
-    def post_method(self, name):
-
-        try:
-            result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'post')])
-
-        except:
-            return 'Can\'t Access'
-        if result:
-            return result[0].action('post', result.model_name,result.fields_list)
-        else:
-            return "the URL entered not found"
-
-    @http.route(['/put/<name>'], auth='public', methods=['PUT'],
-                type='json')
-    def put_method(self, name):
-
-        try:
-            result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'put')])
-
-        except:
-            return 'Can\'t Access'
-        if result:
-            return result[0].action('put', result.model_name,result.fields_list)
-        else:
-            return "the URL entered not found"
-
-    @http.route(['/delete/<name>'], auth='public', methods=['DELETE'],
-                type='json')
-    def delete_method(self, name):
-
-        try:
-            result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'delete')])
-
-        except:
-            return 'Can\'t Access'
-
-        if result:
-            return result[0].action('delete', result.model_name,result.fields_list)
-        else:
-            return "the URL entered not found"
+    # @http.route(['/get/<name>'], auth='public', methods=['GET'],
+    #             type='json')
+    # def get_method(self, name):
+    #
+    #     try:
+    #         result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'get')])
+    #
+    #     except:
+    #         return 'Can\'t Access'
+    #     if result:
+    #         return result[0].action('get', result.model_name,result.fields_list)
+    #     else:
+    #         return "the URL entered not found"
+    #
+    #
+    #
+    # @http.route(['/post/<name>'], auth='public', methods=['POST'],
+    #             type='json')
+    # def post_method(self, name):
+    #
+    #     try:
+    #         result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'post')])
+    #
+    #     except:
+    #         return 'Can\'t Access'
+    #     if result:
+    #         return result[0].action('post', result.model_name,result.fields_list)
+    #     else:
+    #         return "the URL entered not found"
+    #
+    # @http.route(['/put/<name>'], auth='public', methods=['PUT'],
+    #             type='json')
+    # def put_method(self, name):
+    #
+    #     try:
+    #         result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'put')])
+    #
+    #     except:
+    #         return 'Can\'t Access'
+    #     if result:
+    #         return result[0].action('put', result.model_name,result.fields_list)
+    #     else:
+    #         return "the URL entered not found"
+    #
+    # @http.route(['/delete/<name>'], auth='public', methods=['DELETE'],
+    #             type='json')
+    # def delete_method(self, name):
+    #
+    #     try:
+    #         result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'delete')])
+    #
+    #     except:
+    #         return 'Can\'t Access'
+    #
+    #     if result:
+    #         return result[0].action('delete', result.model_name,result.fields_list)
+    #     else:
+    #         return "the URL entered not found"
 
 
 
