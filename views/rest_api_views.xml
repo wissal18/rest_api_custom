@@ -20,7 +20,8 @@
                         <field name="name"/>
                         <field name="method"/>
                         <field name="model_id"/>
-                        <field name="fields_list" widget="many2many_tags" domain="[('model_id','=',model_id)]"/>
+                        <field name="fields_list" widget="many2many_tags" domain="[('model_id','=',model_id)]" attrs="{'invisible': [('method', '=', 'report')]}"/>
+                        <field name="report" domain="[('model_id','=',model_id)]" attrs="{'invisible': [('method', '!=', 'report')]}"/>
                     </group>
                 </sheet>
             </form>

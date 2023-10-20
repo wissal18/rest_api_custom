@@ -17,12 +17,14 @@ class RestAPICustomController(http.Controller):
             res['error'] = 'Method Not allowed'
             return res
         try:
+            method = method.lower()
             result = request.env['rest.api'].search([('name', '=', name), ('method', '=', method)])
 
         except:
             res['error'] = 'API does not exist'
             return res
         if not result:
+            print(result)
             res['error'] = 'API does not exist'
             return res
         return result[0].action(method, result, id)

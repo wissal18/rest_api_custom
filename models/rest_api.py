@@ -10,23 +10,30 @@ class RestAPI(models.Model):
         ('unique_api', 'UNIQUE(method,model_id,name)', 'You already have created an api with these method and model')
     ]
     name = fields.Char('Name')
-    method = fields.Selection([('get', 'GET'), ('post', 'POST'), ('put', 'PUT'), ('delete', 'DELETE')])
+    method = fields.Selection([('get', 'GET'), ('post', 'POST'), ('put', 'PUT'), ('delete', 'DELETE'),('report','REPORT')])
     model_id = fields.Many2one('ir.model', string='Model')
     model_name = fields.Char(related='model_id.model')
     fields_list = fields.Many2many('ir.model.fields')
+    report = fields.Many2one('ir.actions.report')
 
     @api.onchange('model_id')
     def _onchange_model(self):
-        for record in self:
-            if record.model_id:
-                record.fields_list = None
+            if self.model_id:
+                self.fields_list = None
+
+    @api.onchange('model_id')
+    def _onchange_method(self):
+        if self.model_id:
+            self.report = None
+
+
 
     def action(self, method, model_api, id=None):
 
         modelAPI = self.env[model_api.model_name]
         model_fields = model_api.fields_list.mapped('name')
         res = request.get_json_data()
-
+        result = 'No result found'
         if method == 'get':
             result = modelAPI.search([]).read(model_fields if fields else [])
 
