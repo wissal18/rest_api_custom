@@ -5,7 +5,30 @@ import json
 
 class RestAPICustomController(http.Controller):
 
+    @http.route(['/<name>','/<name>/<int:id>'], auth='public',
+                type='json')
+    def rest_api(self, name, id=None):
+        res = {
+            'success':False,
+            'error': ''
+        }
+        method = request.httprequest.method
+        if method not in ['GET', 'POST', 'PUT', 'DELETE']:
+            res['error'] = 'Method Not allowed'
+            return res
+        try:
+            result = request.env['rest.api'].search([('name', '=', name), ('method', '=', method)])
 
+        except:
+            res['error'] = 'API does not exist'
+            return res
+        if not result:
+            res['error'] = 'API does not exist'
+            return res
+        return result.action(method, result, id)
+            
+
+    
     @http.route(['/get/<name>'], auth='public', methods=['GET'],
                 type='json')
     def get_method(self, name):
