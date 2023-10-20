@@ -1,6 +1,6 @@
 from odoo import http
 from odoo.http import request
-import json
+
 
 
 class RestAPICustomController(http.Controller):
@@ -21,90 +21,32 @@ class RestAPICustomController(http.Controller):
             result = request.env['rest.api'].search([('name', '=', name), ('method', '=', method)])
 
         except:
-            res['error'] = 'API does not exist'
+            res['error'] = 'API does not exist1'
             return res
         if not result:
-            print(result)
-            res['error'] = 'API does not exist'
+            res['error'] = 'API does not exist2'
             return res
         return result[0].action(method, result, id)
-            
+
+    @http.route(['/report/<name>', '/report/<name>/<ids>'], auth='public',
+                type='json',methods=['GET'])
+    def get_report(self,name,ids=None):
+        # http: // localhost: 8016 / report / count_sheet / 1, 2, 3
+        res = {
+            'success': False,
+            'error': ''
+        }
+        try:
+            result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'report')])
+            print("3")
+            print(result)
+        except:
+            res['error'] = 'API does not exist3'
+            return res
+        if not result:
+            res['error'] = 'API does not exist4'
+            return res
+        return result[0].action('report', result, ids)
 
     
-    # @http.route(['/get/<name>'], auth='public', methods=['GET'],
-    #             type='json')
-    # def get_method(self, name):
-    #
-    #     try:
-    #         result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'get')])
-    #
-    #     except:
-    #         return 'Can\'t Access'
-    #     if result:
-    #         return result[0].action('get', result.model_name,result.fields_list)
-    #     else:
-    #         return "the URL entered not found"
-    #
-    #
-    #
-    # @http.route(['/post/<name>'], auth='public', methods=['POST'],
-    #             type='json')
-    # def post_method(self, name):
-    #
-    #     try:
-    #         result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'post')])
-    #
-    #     except:
-    #         return 'Can\'t Access'
-    #     if result:
-    #         return result[0].action('post', result.model_name,result.fields_list)
-    #     else:
-    #         return "the URL entered not found"
-    #
-    # @http.route(['/put/<name>'], auth='public', methods=['PUT'],
-    #             type='json')
-    # def put_method(self, name):
-    #
-    #     try:
-    #         result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'put')])
-    #
-    #     except:
-    #         return 'Can\'t Access'
-    #     if result:
-    #         return result[0].action('put', result.model_name,result.fields_list)
-    #     else:
-    #         return "the URL entered not found"
-    #
-    # @http.route(['/delete/<name>'], auth='public', methods=['DELETE'],
-    #             type='json')
-    # def delete_method(self, name):
-    #
-    #     try:
-    #         result = request.env['rest.api'].search([('name', '=', name), ('method', '=', 'delete')])
-    #
-    #     except:
-    #         return 'Can\'t Access'
-    #
-    #     if result:
-    #         return result[0].action('delete', result.model_name,result.fields_list)
-    #     else:
-    #         return "the URL entered not found"
 
-
-
-    # @http.route('/rest_api_custom/partners', auth='public', methods=['GET'])
-    # def display_partners(selfself, **kw):
-    #     try:
-    #         partners = request.env['res.partner'].search([])
-    #     except:
-    #         return 'Can\'t Access'
-    #     output = "<h1> Partners</h1><ul>"
-    #     for partner in partners:
-    #         output += '<li>' + partner.name + '</li>'
-    #     output += '</ul>'
-    #     # return request.render("rest_api_custom.partners_page_customized",{'partners': partners})
-    #
-    # @http.route('/rest_api_custom/partners/<model("res.partner"):p>/', auth='public')
-    # def display_partner(self, p):
-    #     print(p)
-    #     # return request.render('rest_api_custom.partner_page',{'partner':p})
